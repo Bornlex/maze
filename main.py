@@ -15,9 +15,9 @@ def get_free_cell(maze, exclude=[]):
     free = []
     for i in range(len(maze)):
         for j in range(len(maze[i])):
-            if maze[i, j] == 0:
-                if (i, j) not in exclude:
-                    free.append((i, j))
+            if maze[j, i] == 0:
+                if (j, i) not in exclude:
+                    free.append((j, i))
     return random.choice(free)
 
 if __name__ == "__main__":
@@ -31,28 +31,29 @@ if __name__ == "__main__":
         [0, 1, 1, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 1, 0, 0]
     ])
-    agent       = Agent(maze.shape[0] * maze.shape[1])
+    agent       = Agent(2)
     episodes    = 100
     loss        = []
-    start_list  = list()
     for e in range(episodes):
+        print(f"[**] episode {e} :: {episodes}")
         start_cell = get_free_cell(maze)
         exit_cell  = get_free_cell(maze, exclude=[start_cell])
         environment = Environment(maze, start_cell=start_cell, exit_cell=exit_cell)
         environment.render(block_execution=False)
         state = environment.reset(start_cell, exit_cell)
         score = 0
-        state  = state.flatten()
         max_steps = 100
         for i in range(max_steps):
             action = agent.act(state)
             next_state, reward, done = environment.step(action)
-            next_state = next_state.flatten()
+            print(f"{next_state} :: {reward}")
             score += reward
             agent.remember(state, action, reward, next_state, done)
             state = next_state
             environment.render()
             agent.replay()
+            if done:
+                break
         loss.append(score)
     plt.plot([i for i in range(episodes)], loss)
     plt.xlabel("episodes")

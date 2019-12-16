@@ -20,8 +20,8 @@ class Agent(object):
 
     def build_model(self):
         input_x = keras.layers.Input(shape=(self._state_space,))
-        x       = keras.layers.Dense(32, activation="relu")(input_x)
-        x       = keras.layers.Dense(32, activation="relu")(x)
+        x       = keras.layers.Dense(16, activation="relu")(input_x)
+        x       = keras.layers.Dense(16, activation="relu")(x)
         x       = keras.layers.Dense(self._action_space, activation="linear")(x)
         model   = keras.models.Model(inputs=[input_x], outputs=[x])
         model.compile(optimizer="adam", loss="mse")
@@ -39,12 +39,14 @@ class Agent(object):
     def act(self, state):
         if np.random.rand() <= self._epsilon:
             return random.randrange(self._action_space)
+        state   = np.reshape(state, (1, 2))
         actions = self._model.predict(state)
         return np.argmax(actions)
 
     def replay(self):
         if len(self._memory) < self._batch_size:
             return
+        #import pdb; pdb.set_trace()
         batch    = random.sample(self._memory, self._batch_size)
         states   = np.array([b[0] for b in batch])
         actions  = np.array([b[1] for b in batch])

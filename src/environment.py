@@ -22,8 +22,8 @@ class Environment(object):
         
         self._exit_reward = 10
         self._move_reward = -0.01
-        self._visited_reward = -0.3
-        self._illegal_reward = -0.8
+        self._visited_reward = -0.5
+        self._illegal_reward = -2
 
         self._visited_cells = []
     
@@ -32,7 +32,8 @@ class Environment(object):
         self._start_cell    = start_cell
         self._exit_cell     = exit_cell
         self._current       = start_cell
-        return np.array([[*self._current]])
+        col, row = self._current
+        return np.array([row, col])
     
     def _draw(self):
         self._axis.plot(*self._current, "ro")
@@ -42,13 +43,13 @@ class Environment(object):
     def _get_legal_actions(self):
         actions = []
         col, row = self._current
-        if col - 1 >= 0 and self._maze[col - 1, row] == 0:
+        if col - 1 >= 0 and self._maze[row, col - 1] == 0:
             actions.append(0)
-        if col + 1 <= self._maze.shape[0] - 1 and self._maze[col + 1, row] == 0:
+        if col + 1 <= self._maze.shape[0] - 1 and self._maze[row, col + 1] == 0:
             actions.append(1)
-        if row - 1 >= 0 and self._maze[col, row - 1] == 0:
+        if row - 1 >= 0 and self._maze[row - 1, col] == 0:
             actions.append(2)
-        if row + 1 <= self._maze.shape[1] - 1 and self._maze[col, row + 1] == 0:
+        if row + 1 <= self._maze.shape[1] - 1 and self._maze[row + 1, col] == 0:
             actions.append(3)
         return actions
 
@@ -78,7 +79,8 @@ class Environment(object):
                 reward = self._move_reward
             self._visited_cells.append(self._current)
         self._draw()
-        state = np.array([[*self._current]])
+        col, row = self._current
+        state = np.array([row, col])
         return state, reward, done
     
     def _render(self):
