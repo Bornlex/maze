@@ -46,7 +46,6 @@ if __name__ == "__main__":
         for i in range(max_steps):
             action = agent.act(state)
             next_state, reward, done = environment.step(action)
-            print(f"{next_state} :: {reward}")
             score += reward
             agent.remember(state, action, reward, next_state, done)
             state = next_state
