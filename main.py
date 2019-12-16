@@ -51,7 +51,8 @@ if __name__ == "__main__":
             agent.remember(state, action, reward, next_state, done)
             state = next_state
             environment.render()
-            agent.replay()
+            if i % 3 == 0:
+                agent.replay()
             if done:
                 break
         loss.append(score)

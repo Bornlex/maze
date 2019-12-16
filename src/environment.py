@@ -36,13 +36,13 @@ class Environment(object):
         return np.array([row, col])
     
     def _draw(self):
-        self._axis.plot(*self._current, "ro")
+        self._axis.plot(*self._current[::-1], "ro")
         self._axis.get_figure().canvas.draw()
         self._axis.get_figure().canvas.flush_events()
     
     def _get_legal_actions(self):
         actions = []
-        col, row = self._current
+        row, col = self._current
         if col - 1 >= 0 and self._maze[row, col - 1] == 0:
             actions.append(0)
         if col + 1 <= self._maze.shape[0] - 1 and self._maze[row, col + 1] == 0:
@@ -56,7 +56,7 @@ class Environment(object):
     def step(self, action):
         legal_actions = self._get_legal_actions()
         done = False
-        col, row = self._current
+        row, col = self._current
         if action not in legal_actions:
             reward = self._illegal_reward
         else:
@@ -68,7 +68,7 @@ class Environment(object):
                 row -= 1
             elif action == 3:
                 row += 1
-            self._current = (col, row)
+            self._current = (row, col)
             reward = 0
             if self._current == self._exit_cell:
                 reward = self._exit_reward
@@ -79,7 +79,7 @@ class Environment(object):
                 reward = self._move_reward
             self._visited_cells.append(self._current)
         self._draw()
-        col, row = self._current
+        row, col = self._current
         state = np.array([row, col])
         return state, reward, done
     
@@ -91,8 +91,8 @@ class Environment(object):
         self._axis.set_yticks(np.arange(0.5, ncols, step=1))
         self._axis.set_yticklabels([])
         self._axis.grid(True)
-        self._axis.plot(*self._exit_cell, "gs", markersize=30)
-        self._axis.text(*self._exit_cell, "Exit", ha="center", va="center", color="red")
+        self._axis.plot(*self._exit_cell[::-1], "gs", markersize=30)
+        self._axis.text(*self._exit_cell[::-1], "Exit", ha="center", va="center", color="red")
         self._axis.imshow(self._maze, cmap="binary")
         self._axis.get_figure().canvas.draw()
 

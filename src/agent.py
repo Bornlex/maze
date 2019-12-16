@@ -20,8 +20,8 @@ class Agent(object):
 
     def build_model(self):
         input_x = keras.layers.Input(shape=(self._state_space,))
-        x       = keras.layers.Dense(16, activation="relu")(input_x)
-        x       = keras.layers.Dense(16, activation="relu")(x)
+        x       = keras.layers.Dense(8, activation="relu")(input_x)
+        x       = keras.layers.Dense(8, activation="relu")(x)
         x       = keras.layers.Dense(self._action_space, activation="linear")(x)
         model   = keras.models.Model(inputs=[input_x], outputs=[x])
         model.compile(optimizer="adam", loss="mse")
