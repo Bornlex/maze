@@ -15,9 +15,9 @@ def get_free_cell(maze, exclude=[]):
     free = []
     for i in range(len(maze)):
         for j in range(len(maze[i])):
-            if maze[j, i] == 0:
-                if (j, i) not in exclude:
-                    free.append((j, i))
+            if maze[i, j] == 0:
+                if (i, j) not in exclude:
+                    free.append((i, j))
     return random.choice(free)
 
 if __name__ == "__main__":

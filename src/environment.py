@@ -22,7 +22,7 @@ class Environment(object):
         
         self._exit_reward = 10
         self._move_reward = -0.01
-        self._visited_reward = -0.5
+        self._visited_reward = -0.05
         self._illegal_reward = -2
 
         self._visited_cells = []
